@@ -1,12 +1,83 @@
-
-
-
-#city-input, #weather-output {
-    max-width: 400px;
-    margin: 0 auto;
+* {
+   margin: 0;
 }
-  
-.banner {
-    color: #FFD23F;
-    font-family: sans-serif;
+
+body {
+   background: #3c5377;
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.form-control::placeholder {
+   color: #eee;
+}
+
+.form-contro:-ms-input-placeholder {
+   /* Internet Explorer 10-11 */
+   color: #eee;
+}
+
+.form-control::-ms-input-placeholder {
+   /* Microsoft Edge */
+   color: #eee;
+}
+
+h1,
+h3,
+li {
+   font-style: 'Montserrat', Sans-serif;
+   color: #eee;
+}
+
+h1.banner {
+   font-size: 3.5em;
+   font-weight: 700;
+}
+
+h1#weather-type {
+   font-size: 2em;
+   font-weight: 500;
+}
+
+h3 {
+   font-style: 'Montserrat', Sans-serif;
+   font-size: 2.5em;
+   font-weight: 700;
+}
+
+.hero-img-containor {
+   z-index: -1;
+   height: 100%;
+   width: 100%;
+   background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 5%, black 110%),
+      url('https://unsplash.com/photos/8Ogfqvw15Rg');
+   background-blend-mode: darken;
+
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   opacity: 80%;
+   border-radius: 20px;
+}
+
+.app {
+   display: grid;
+   height: 100%;
+   margin: 3rem auto 1rem auto;
+   padding: 60px 100px 60px 100px;
+   max-width: 500px;
+   box-shadow: 0.2em 0.2em 0.8em 0.2em rgba(0, 0, 0, 0.3);
+   border-radius: 20px;
+}
+
+#city-input,
+.card {
+   background: transparent;
+}
+
+.switch {
+   width: 36px;
+   height: 36px;
 }
