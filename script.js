@@ -1,88 +1,43 @@
-require('dotenv').config();
+// require('dotenv').config();
 
-// Clicking the button sets everything in motion.
+import { searchCity } from './fetches/weather.js';
+
+// Searches weather based on city input.
 document.getElementById('click').onclick = () => {
    let city = document.getElementById('city-input').value;
+   document.getElementById('temp-switch').checked = false;
    searchCity(city);
 };
 
-// Searches weather based on city input.
-const searchCity = (city) => {
-   document.getElementById('city-input').value = '';
-   document.getElementById('city-name').innerHTML = city;
+let cb = document.querySelector('input[name=temp-switch]');
+cb.addEventListener('change', function () {
+   let temp = document.getElementById('temp').innerHTML;
+   let temp_min = document.getElementById('min-temp').innerHTML;
+   let temp_max = document.getElementById('max-temp').innerHTML;
 
-   const URL = 'https://api.openweathermap.org/data/2.5/weather';
-   let full_Url = `${URL}?q=${city}&units=imperial&appid=${WEATHER_API_KEY}`;
+   let f = Math.round(changeTempF(temp));
+   let fMin = Math.round(changeTempF(temp_min));
+   let fMax = Math.round(changeTempF(temp_max));
 
-   // fetches weather data from Openweatherapi
-   fetch(full_Url)
-      .then((response) => {
-         return response.json();
-      })
+   let c = Math.round(changeTempC(temp));
+   let cMin = Math.round(changeTempC(temp_min));
+   let cMax = Math.round(changeTempC(temp_max));
+   if (this.checked) {
+      document.getElementById('temp').innerHTML = c;
+      document.getElementById('min-temp').innerHTML = cMin;
+      document.getElementById('max-temp').innerHTML = cMax;
+   } else {
+      document.getElementById('temp').innerHTML = f;
+      document.getElementById('min-temp').innerHTML = fMin;
+      document.getElementById('max-temp').innerHTML = fMax;
+   }
+});
 
-      // Gets weather data, destructures, and sets inner html to
-      // current weather
-      .then((data) => {
-         let { temp } = data.main;
-         let { temp_max } = data.main;
-         let { temp_min } = data.main;
-         let { description } = data.weather[0];
-
-         document.getElementById('temp').innerHTML = temp;
-         document.getElementById('min-temp').innerHTML = temp_min;
-         document.getElementById('max-temp').innerHTML = temp_max;
-         document.getElementById('weather-type').innerHTML = description;
-         getUnsplashPicture(city);
-      })
-
-      // If error, lets the user know city is not found. I clear the console
-      // to help preserve API key
-      .catch((error) => {
-         document.getElementById('weather-type').innerHTML =
-            'Weather not found.';
-         if (error.response && error.response.status === 404) {
-            console.clear();
-         }
-      });
+// Farhenheit to Celsius
+const changeTempC = (temp) => {
+   return (temp - 32) * (5 / 9);
 };
 
-// fetches an object of pictures from Unsplash.com based on
-// the city the user searches for. The sets the background
-// image to that picture.
-
-const getUnsplashPicture = (city) => {
-   const API_KEY = PICTURE_API_KEY;
-   const URL = `https://api.unsplash.com/search/photos?query=${city}&client_id=${API_KEY}`;
-
-   // fetch picture from unsplash
-   fetch(URL)
-      .then((response) => {
-         return response.json();
-      })
-
-      // Gets the pictures (unsplash returns an object of 10 pictures). I
-      // set the picture as a new background image.
-      .then((data) => {
-         console.log(data);
-         let { results } = data;
-         let img = new Image();
-         let pictureImg = document.querySelector('.hero-img-containor');
-         img.src = results[getIndex()].urls.regular;
-         pictureImg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),url(${img.src}`;
-      })
-
-      // If error, I set the background to the same image as when
-      // it first loaded. Who doesn't love a good beach picture?
-      .catch((error) => {
-         let img = new Image();
-         let pictureImg = document.querySelector('.hero-img-containor');
-         img.src = './assets/beach-unsplash.jpg';
-         document.getElementById('city-name').innerHTML = 'City Not Found';
-         pictureImg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),url(${img.src}`;
-      });
-};
-
-// Gets a random number, becomes the index for results object above.
-const getIndex = () => {
-   return Math.floor(Math.random() * 5) + 1;
+const changeTempF = (temp) => {
+   return temp * (9 / 5) + 32;
 };
